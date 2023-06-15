@@ -18,12 +18,12 @@ public class BlogController {
     }
 
     @PostMapping("/blog")
-    public BlogResponseDto createMemo(@RequestBody BlogRequestDto requestDto) {
+    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto) {
         return blogService.createBlog(requestDto);
     }
 
 
-    @GetMapping("/blogALL")
+    @GetMapping("/blog")
     public List<BlogResponseDto> getBlogALL() {
         return blogService.getBlogALL();
     }
