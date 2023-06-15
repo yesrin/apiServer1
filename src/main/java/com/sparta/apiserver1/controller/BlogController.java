@@ -17,7 +17,7 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @PostMapping("/memos")
+    @PostMapping("/blog")
     public BlogResponseDto createMemo(@RequestBody BlogRequestDto requestDto) {
         return blogService.createBlog(requestDto);
     }
