@@ -5,6 +5,7 @@ import com.sparta.apiserver1.dto.BlogResponseDto;
 import com.sparta.apiserver1.entity.Blog;
 import com.sparta.apiserver1.repository.BlogRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BlogService {
 
         return new BlogResponseDto(Blog);
     }
-
+    @Transactional
     public Long updateBlog(Long id, BlogRequestDto requestDto) {
         Blog blog = findBlog(id);
         blog.update(requestDto);
