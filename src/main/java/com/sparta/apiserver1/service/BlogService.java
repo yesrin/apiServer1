@@ -36,11 +36,16 @@ public class BlogService {
         return new BlogResponseDto(Blog);
     }
     @Transactional
-    public Long updateBlog(Long id, BlogRequestDto requestDto) {
+    public boolean updateBlog(Long id, BlogRequestDto requestDto) {
         Blog blog = findBlog(id);
-        blog.update(requestDto);
-        return id;
+        if(requestDto.getPassword().equals(blog.getPassword())){
+            blog.update(requestDto);
+            return true;
+        }else{
+            return false;
+        }
     }
+
 
     public Long deleteBlog(Long id) {
         Blog blog = findBlog(id);
