@@ -47,10 +47,15 @@ public class BlogService {
     }
 
 
-    public Long deleteBlog(Long id) {
+    public boolean deleteBlog(Long id,BlogRequestDto requestDto) {
         Blog blog = findBlog(id);
-        blogRepository.delete(blog);
-        return id;
+        if(requestDto.getPassword().equals(blog.getPassword())){
+            blog.update(requestDto);
+            blogRepository.delete(blog);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private Blog findBlog(Long id) {

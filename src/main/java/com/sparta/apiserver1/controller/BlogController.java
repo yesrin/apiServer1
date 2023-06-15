@@ -29,7 +29,7 @@ public class BlogController {
     }
 
     @GetMapping("/blog/{id}")
-    public BlogResponseDto getBlogByID(@PathVariable Long id){
+    public BlogResponseDto getBlogByID(@PathVariable Long id) {
         return blogService.getBlogByID(id);
     }
 
@@ -37,9 +37,10 @@ public class BlogController {
     public boolean updateBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto) {
         return blogService.updateBlog(id, requestDto);
     }
+
     @DeleteMapping("/blog/{id}")
-    public Long deleteBlog(@PathVariable Long id) {
-        return blogService.deleteBlog(id);
+    public boolean deleteBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto) {
+        return blogService.deleteBlog(id, requestDto);
     }
 
 
