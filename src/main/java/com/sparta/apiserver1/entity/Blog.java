@@ -15,25 +15,30 @@ public class Blog extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "username", nullable = false)
-    private String username;
-    @Column(name="password", nullable = false)
-    private String password;
+
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
-    public Blog(BlogRequestDto requestDto) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(name="username", nullable = false)
+    private String  username;
+
+
+    public Blog(BlogRequestDto requestDto, User user) {
+        this.user=user;
         this.title=requestDto.getTitle();
-        this.username=requestDto.getUsername();
-        this.password=requestDto.getPassword();
         this.contents= requestDto.getContents();
+        this.username=user.getUsername();
     }
 
     public void update(BlogRequestDto requestDto) {
         this.title=requestDto.getTitle();
-        this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
     }
 }
