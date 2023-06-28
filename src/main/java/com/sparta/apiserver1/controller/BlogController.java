@@ -3,7 +3,9 @@ package com.sparta.apiserver1.controller;
 import com.sparta.apiserver1.dto.BlogRequestDto;
 import com.sparta.apiserver1.dto.BlogResponseDto;
 import com.sparta.apiserver1.entity.Blog;
+import com.sparta.apiserver1.security.UserDetailsImpl;
 import com.sparta.apiserver1.service.BlogService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +19,10 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @PostMapping("/blog")
-    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto) {
-        return blogService.createBlog(requestDto);
-    }
+//    @PostMapping("/blog")
+//    public BlogResponseDto createBlog(@RequestBody BlogRequestDto requestDto) {
+//        return blogService.createBlog(requestDto);
+//    }
 
 
     @GetMapping("/blog")
@@ -33,15 +35,15 @@ public class BlogController {
         return blogService.getBlogByID(id);
     }
 
-    @PutMapping("/blog/{id}")
-    public boolean updateBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto) {
-        return blogService.updateBlog(id, requestDto);
+
+
+    @PostMapping("/blog/post")
+    public BlogResponseDto addPost(@RequestBody BlogRequestDto requestDto,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return blogService.addPost(requestDto, userDetails.getUser());
     }
 
-    @DeleteMapping("/blog/{id}")
-    public boolean deleteBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto) {
-        return blogService.deleteBlog(id, requestDto);
-    }
+
 
 
 }

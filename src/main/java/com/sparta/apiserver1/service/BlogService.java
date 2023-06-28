@@ -3,6 +3,7 @@ package com.sparta.apiserver1.service;
 import com.sparta.apiserver1.dto.BlogRequestDto;
 import com.sparta.apiserver1.dto.BlogResponseDto;
 import com.sparta.apiserver1.entity.Blog;
+import com.sparta.apiserver1.entity.User;
 import com.sparta.apiserver1.repository.BlogRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +19,6 @@ public class BlogService {
         this.blogRepository = blogRepository;
     }
 
-    public BlogResponseDto createBlog(BlogRequestDto requestDto) {
-        Blog blog = new Blog(requestDto);
-        Blog saveBlog = blogRepository.save(blog);
-        BlogResponseDto blogResponseDto = new BlogResponseDto(saveBlog);
-        return  blogResponseDto;
-    }
-
     public List<BlogResponseDto> getBlogALL() {
         return blogRepository.findAllByOrderByCreatedAtDesc().stream().map(BlogResponseDto::new).toList();
     }
@@ -35,32 +29,18 @@ public class BlogService {
 
         return new BlogResponseDto(Blog);
     }
-    @Transactional
-    public boolean updateBlog(Long id, BlogRequestDto requestDto) {
-        Blog blog = findBlog(id);
-        if(requestDto.getPassword().equals(blog.getPassword())){
-            blog.update(requestDto);
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-
-    public boolean deleteBlog(Long id,BlogRequestDto requestDto) {
-        Blog blog = findBlog(id);
-        if(requestDto.getPassword().equals(blog.getPassword())){
-            blog.update(requestDto);
-            blogRepository.delete(blog);
-            return true;
-        }else{
-            return false;
-        }
-    }
 
     private Blog findBlog(Long id) {
         return blogRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 블로는 존재하지 않습니다"));
     };
+
+    @Transactional
+    public BlogResponseDto addPost(BlogRequestDto requestDto, User user) {
+        Blog blog = new Blog(requestDto,user);
+        Blog saveBlog = blogRepository.save(blog);
+        BlogResponseDto blogResponseDto = new BlogResponseDto(saveBlog);
+        return  blogResponseDto;
+    }
 
 }
