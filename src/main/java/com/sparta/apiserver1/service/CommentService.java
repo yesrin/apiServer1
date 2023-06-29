@@ -40,6 +40,14 @@ public class CommentService {
         return new CommentResponseDto(comment);
 
     }
+    public CommentResponseDto deleteCommit(Long postId, Long commentId, User user) {
+        findPost(postId);
+        Comment comment =commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("선택한 댓글이 존재하지 않습니다."));
+        comment.checkUsername(user.getUsername());
+        commentRepository.delete(comment);
+
+        return new CommentResponseDto(comment);
+    }
 
     private Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(() ->

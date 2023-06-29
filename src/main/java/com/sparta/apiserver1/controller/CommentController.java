@@ -29,4 +29,11 @@ public class CommentController {
                                             @AuthenticationPrincipal UserDetailsImpl userDetails){
         return commentService.updateComment(postId,commentId,requestDto,userDetails.getUser());
     }
+
+    @DeleteMapping("/comment/{postId}/{commentId}")
+    public CommentResponseDto deleteCommit(@PathVariable Long postId,
+                                     @PathVariable Long commentId,
+                                     @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return commentService.deleteCommit(postId,commentId,userDetails.getUser());
+    }
 }
