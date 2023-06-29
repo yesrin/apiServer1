@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Table(name="commnt")
 @NoArgsConstructor
-public class Comment {
+public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,14 +23,22 @@ public class Comment {
     private String username;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
     private Post post;
 
+    @Column(name="post_number",nullable = false)
+    private Long postNumber;
 
 
-    public Comment(CommentRequestDto requestDto,Post post){
+
+    public Comment(Long postId,CommentRequestDto requestDto,User user){
         this.contents=requestDto.getContents();
-        this.username=post.getUser().getUsername();
+        this.username=user.getUsername();
+        this.postNumber =postId;
     }
 
 }
