@@ -36,8 +36,8 @@ public class PostController {
         return postSerive.updatePost(id, requestDto, userDetails.getUser());
     }
     @DeleteMapping("/post/{id}")
-    public Long deletePost(@PathVariable Long id) {
-        return postSerive.deletePost(id);
+    public Long deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postSerive.deletePost(id,userDetails);
     }
 
     @PostMapping("/post")

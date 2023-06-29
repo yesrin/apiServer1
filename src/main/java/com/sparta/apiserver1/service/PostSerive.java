@@ -5,6 +5,7 @@ import com.sparta.apiserver1.dto.PostResponseDto;
 import com.sparta.apiserver1.entity.Post;
 import com.sparta.apiserver1.entity.User;
 import com.sparta.apiserver1.repository.PostRepository;
+import com.sparta.apiserver1.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +31,9 @@ public class PostSerive {
         return new PostResponseDto(Post);
     }
 
-    public Long deletePost(Long id) {
+    public Long deletePost(Long id, UserDetailsImpl userDetails) {
         Post post = findPost(id);
+        post.checkUsername(userDetails.getUsername());
         postRepository.delete(post);
         return id;
     }
