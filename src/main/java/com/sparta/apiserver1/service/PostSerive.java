@@ -50,12 +50,21 @@ public class PostSerive {
 
     @Transactional
     public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
+
         Post post = findPost(id);
-        // post의 userid와 user의 id가 같다면 update
+
+//        // post의 userid와 user의 id가 일치하지 않으면 오류메세지
+//        if(!user.equals(post.getUser())) {
+//            new IllegalArgumentException("작성자가 일치하지 않습니다");
+//        }
+
+//        // usrname으로
+//        if(!user.getUsername().equals(post.getUsername())) {
+//            new IllegalArgumentException("작성자가 일치하지 않습니다");
+//         }
+
+        post.checkUsername(user.getUsername());
         post.update(requestDto);
-//        if(user.equals(post.getUser())) {
-//
-//        }else new IllegalArgumentException("작성자가 일치하지 않습니다");
 
         return new PostResponseDto(post);
     }

@@ -34,11 +34,17 @@ public class Post extends Timestamped{
         this.user=user;
         this.title=requestDto.getTitle();
         this.contents= requestDto.getContents();
-        this.username=user.getUsername();
+        this.username= user.getUsername();
     }
 
     public void update(PostRequestDto requestDto) {
         this.title=requestDto.getTitle();
         this.contents = requestDto.getContents();
+    }
+
+    public void checkUsername(String username) {
+        if(!this.username.equals(username)) {
+            throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
+        }
     }
 }
