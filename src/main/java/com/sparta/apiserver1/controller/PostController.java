@@ -1,7 +1,6 @@
 package com.sparta.apiserver1.controller;
 
 import com.sparta.apiserver1.dto.PostRequestDto;
-import com.sparta.apiserver1.dto.Post;
 import com.sparta.apiserver1.dto.PostResponseDto;
 import com.sparta.apiserver1.security.UserDetailsImpl;
 import com.sparta.apiserver1.service.PostSerive;
@@ -19,28 +18,28 @@ public class PostController {
         this.postSerive = postSerive;
     }
 
-    @GetMapping("/blog")
-    public List<PostResponseDto> getBlogALL() {
-        return postSerive.getBlogALL();
+    @GetMapping("/post")
+    public List<PostResponseDto> getPostALL() {
+        return postSerive.getPostALL();
     }
 
-    @GetMapping("/blog/{id}")
-    public PostResponseDto getBlogByID(@PathVariable Long id){
-        return postSerive.getBlogByID(id);
+    @GetMapping("/post/{id}")
+    public PostResponseDto getPostByID(@PathVariable Long id){
+        return postSerive.getPostByID(id);
     }
 
-    @PutMapping("/blog/{id}")
-    public boolean updateBlog(@PathVariable Long id,
+    @PutMapping("/post/{id}")
+    public boolean updatePost(@PathVariable Long id,
                               @RequestBody PostRequestDto requestDto,
                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postSerive.updateBlog(id, requestDto, userDetails.getUser());
+        return postSerive.updatePost(id, requestDto, userDetails.getUser());
     }
-    @DeleteMapping("/blog/{id}")
-    public Long deleteBlog(@PathVariable Long id) {
-        return postSerive.deleteBlog(id);
+    @DeleteMapping("/post/{id}")
+    public Long deletePost(@PathVariable Long id) {
+        return postSerive.deletePost(id);
     }
 
-    @PostMapping("/blog")
+    @PostMapping("/post")
     public PostResponseDto addPost (@RequestBody PostRequestDto requestDto,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postSerive.addPost(requestDto, userDetails.getUser());

@@ -19,24 +19,24 @@ public class PostSerive {
         this.postRepository = postRepository;
     }
 
-    public List<PostResponseDto> getBlogALL() {
+    public List<PostResponseDto> getPostALL() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
     }
 
-    public PostResponseDto getBlogByID(Long id) {
+    public PostResponseDto getPostByID(Long id) {
         Post Post = postRepository.findById(id).orElseThrow(()
                 -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
 
         return new PostResponseDto(Post);
     }
 
-    public Long deleteBlog(Long id) {
-        Post post = findBlog(id);
+    public Long deletePost(Long id) {
+        Post post = findPost(id);
         postRepository.delete(post);
         return id;
     }
 
-    private Post findBlog(Long id) {
+    private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 블로는 존재하지 않습니다"));
     };
@@ -49,10 +49,10 @@ public class PostSerive {
     }
 
     @Transactional
-    public boolean updateBlog(Long id, PostRequestDto requestDto, User user) {
-        Post post = findBlog(id);
+    public boolean updatePost(Long id, PostRequestDto requestDto, User user) {
+        Post post = findPost(id);
         post.update(requestDto);
-        return ture;
+        return false;
     }
 
 }
