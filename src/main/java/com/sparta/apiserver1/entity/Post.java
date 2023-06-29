@@ -22,19 +22,19 @@ public class Post extends Timestamped{
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
+    @Column(name="username", nullable = false)
+    private String  username;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name="username", nullable = false)
-    private String  username;
-
 
     public Post(PostRequestDto requestDto, User user) {
-        this.user=user;
         this.title=requestDto.getTitle();
         this.contents= requestDto.getContents();
         this.username= user.getUsername();
+        this.user=user;
     }
 
     public void update(PostRequestDto requestDto) {
