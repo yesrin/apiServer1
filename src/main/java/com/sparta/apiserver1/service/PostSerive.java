@@ -6,19 +6,21 @@ import com.sparta.apiserver1.entity.Post;
 import com.sparta.apiserver1.entity.User;
 import com.sparta.apiserver1.repository.PostRepository;
 import com.sparta.apiserver1.security.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PostSerive {
 
     private final PostRepository postRepository;
 
-    public PostSerive(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+//    public PostSerive(PostRepository postRepository) {
+//        this.postRepository = postRepository;
+//    }
 
     public List<PostResponseDto> getPostALL() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();

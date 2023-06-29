@@ -5,6 +5,7 @@ import com.sparta.apiserver1.dto.PostRequestDto;
 import com.sparta.apiserver1.dto.PostResponseDto;
 import com.sparta.apiserver1.security.UserDetailsImpl;
 import com.sparta.apiserver1.service.PostSerive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class PostController {
     private final PostSerive postSerive;
 
-    public PostController(PostSerive postSerive) {
-        this.postSerive = postSerive;
-    }
+//    public PostController(PostSerive postSerive) {
+//        this.postSerive = postSerive;
+//    }
 
     @GetMapping("/post")
     public List<PostResponseDto> getPostALL() {
