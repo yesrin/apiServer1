@@ -3,7 +3,6 @@ package com.sparta.apiserver1.service;
 
 import com.sparta.apiserver1.dto.CommentRequestDto;
 import com.sparta.apiserver1.dto.CommentResponseDto;
-import com.sparta.apiserver1.dto.PostResponseDto;
 import com.sparta.apiserver1.entity.Comment;
 import com.sparta.apiserver1.entity.Post;
 import com.sparta.apiserver1.entity.User;
@@ -14,22 +13,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class CommentService {
     private CommentRepository commentRepository;
     private PostRepository postRepository;
 
+    public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
+        this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
+    }
+
     @Transactional
     public CommentResponseDto addComment(Long postId,CommentRequestDto requestDto, User user) {
-        findPost(postId);
-        Comment comment= new Comment(postId,requestDto,user);
+        Post post =findPost(postId);
+        Comment comment= new Comment(requestDto,user,post);
         Comment saveComment= commentRepository.save(comment);
 
         return new CommentResponseDto(saveComment);
     }
 
-    private Post findPost(Long id) {
-        return postRepository.findById(id).orElseThrow(() ->
+    private Post findPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시물이 존재하지 않습니다"));
     };
 }
