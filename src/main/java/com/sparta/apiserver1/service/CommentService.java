@@ -31,10 +31,21 @@ public class CommentService {
         return new CommentResponseDto(saveComment);
     }
 
+    @Transactional
+    public CommentResponseDto updateComment(Long postId,Long commentId ,CommentRequestDto requestDto, User user) {
+        findPost(postId);
+        Comment comment =commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("선택한 댓글이 존재하지 않습니다."));
+        comment.checkUsername(user.getUsername()); // 지금 로그인한 사람이 댓글 작성한 사람이 맞는지 확인
+        comment.update(requestDto);
+        return new CommentResponseDto(comment);
+
+    }
+
     private Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 게시물이 존재하지 않습니다"));
     };
+
 }
 
 
