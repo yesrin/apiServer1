@@ -38,7 +38,7 @@ public class PostSerive {
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 블로는 존재하지 않습니다"));
+                new IllegalArgumentException("선택한 게시물이 존재하지 않습니다"));
     };
     @Transactional
     public PostResponseDto addPost(PostRequestDto requestDto, User user) {
@@ -49,10 +49,15 @@ public class PostSerive {
     }
 
     @Transactional
-    public boolean updatePost(Long id, PostRequestDto requestDto, User user) {
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
         Post post = findPost(id);
+        // post의 userid와 user의 id가 같다면 update
         post.update(requestDto);
-        return false;
+//        if(user.equals(post.getUser())) {
+//
+//        }else new IllegalArgumentException("작성자가 일치하지 않습니다");
+
+        return new PostResponseDto(post);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.sparta.apiserver1.controller;
 
+
 import com.sparta.apiserver1.dto.PostRequestDto;
 import com.sparta.apiserver1.dto.PostResponseDto;
 import com.sparta.apiserver1.security.UserDetailsImpl;
@@ -29,7 +30,7 @@ public class PostController {
     }
 
     @PutMapping("/post/{id}")
-    public boolean updatePost(@PathVariable Long id,
+    public PostResponseDto updatePost(@PathVariable Long id,
                               @RequestBody PostRequestDto requestDto,
                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postSerive.updatePost(id, requestDto, userDetails.getUser());
