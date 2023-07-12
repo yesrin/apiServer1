@@ -18,8 +18,8 @@ public class PostController {
     private final PostSerive postSerive;
 
     @GetMapping("/post")
-    public List<PostResponseDto> getPostALL() {
-        return postSerive.getPostALL();
+    public List<PostResponseDto> getAllPostAndComment() {
+        return postSerive.getAllPostAndComment();
     }
     @PutMapping("/post/{id}")
     public PostResponseDto updatePost(@PathVariable Long id,

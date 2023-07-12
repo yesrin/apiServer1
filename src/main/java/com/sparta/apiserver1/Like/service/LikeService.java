@@ -8,11 +8,9 @@ import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service

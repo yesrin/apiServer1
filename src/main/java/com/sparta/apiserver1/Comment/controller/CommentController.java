@@ -8,11 +8,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
+
+
+    @GetMapping("/comment")
+    public List<CommentResponseDto> selecteAllComment(){
+        return commentService.selecteAllComment();
+    }
+
     @PostMapping("/comment/{postId}")
     public CommentResponseDto addComment(@PathVariable Long postId,
                                          @RequestBody CommentRequestDto requestDto,
