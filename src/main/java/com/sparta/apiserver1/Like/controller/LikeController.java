@@ -25,7 +25,7 @@ public class LikeController {
 
 
     @PostMapping("/like/{postId}/{commentId}")
-    public Boolean likeComment(@PathVariable Long postId,
+    public String likeComment(@PathVariable Long postId,
                             @PathVariable Long commentId,
                             @AuthenticationPrincipal UserDetailsImpl userDetails){
 

@@ -28,24 +28,33 @@ public class LikeService {
         Post post=postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         Like like= new Like(user,post);
 
-        Like likeExist= likeRepository.findByUserIdAndPostId(postId,user.getId());
+        Like likeExist= likeRepository.findByUserIdAndPostId(user.getId(),postId);
         if(likeExist==null){
             likeRepository.save(like);
-            post.setLikeCount((post.getLikeCount())+1);
-            return "좋아요";
+            post.like();
+            return "게시글 좋아요";
         }else {
             likeRepository.delete(likeExist);
-            post.setLikeCount((post.getLikeCount())-1);
-            return "좋아요 취소";
+            post.disLike();
+            return "게시글 좋아요 취소";
         }
     }
-
-    public Boolean likeComment(Long postId, Long commentId, User user) {
+    @Transactional
+    public String likeComment(Long postId, Long commentId, User user) {
         Post post=postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("댓글이 존재하지 않습니다"));
         Like like= new Like(user,post,comment);
 
+        Like likeExist = likeRepository.findByUserIdAndPostIdAndCommentId(user.getId(),postId,commentId);
 
-        return true;
+        if(likeExist==null){
+            likeRepository.save(like);
+            comment.like();
+            return "댓글 좋아요";
+        }else {
+            likeRepository.delete(likeExist);
+            comment.disLike();
+            return "댓글 좋아요 취소";
+        }
     }
 }

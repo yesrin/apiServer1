@@ -33,7 +33,7 @@ public class Post extends Timestamped {
     private String  username;
 
     @Column(name="like_count")
-    private int likeCount;
+    private Long likeCount;
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private List<Like> likes=new ArrayList<>();
@@ -61,5 +61,12 @@ public class Post extends Timestamped {
         if(!this.username.equals(username)) {
             throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
         }
+    }
+
+    public void like(){
+        this.likeCount=likeCount+1;
+    }
+    public void disLike(){
+        this.likeCount=likeCount-1;
     }
 }

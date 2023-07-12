@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name="commnt")
+@Table(name="comment")
 @NoArgsConstructor
 public class Comment extends Timestamped {
     @Id
@@ -30,7 +30,7 @@ public class Comment extends Timestamped {
     private String username;
 
     @Column(name="like_count")
-    private int likeCount;
+    private Long likeCount;
 
     @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL)
     private List<Like> likes=new ArrayList<>();
@@ -56,8 +56,14 @@ public class Comment extends Timestamped {
             throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
         }
     }
-
     public void update(CommentRequestDto requestDto) {
         this.contents=requestDto.getContents();
+    }
+
+    public void like(){
+        this.likeCount=likeCount+1;
+    }
+    public void disLike(){
+        this.likeCount=likeCount-1;
     }
 }
