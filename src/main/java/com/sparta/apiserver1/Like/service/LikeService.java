@@ -24,37 +24,41 @@ public class LikeService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public String likePost(Long postId, User user) {
-        Post post=postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        Like like= new Like(user,post);
+    public void likePost(Long postId, User user) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
-        Like likeExist= likeRepository.findByUserIdAndPostId(user.getId(),postId);
-        if(likeExist==null){
-            likeRepository.save(like);
-            post.like();
-            return "게시글 좋아요";
-        }else {
-            likeRepository.delete(likeExist);
-            post.disLike();
-            return "게시글 좋아요 취소";
-        }
+        Optional<Like> likeExist = likeRepository.findByUserIdAndPostId(user.getId(), postId);
+
+        likeExist.ifPresentOrElse(
+                like -> { // 값이 있으면 삭제하고 count-1
+                    likeRepository.delete(like);
+                    post.disLike();
+                },
+                () -> { // 값이 없으면 추가하고 count+1
+                    Like like = new Like(user, post);
+                    likeRepository.save(like);
+                    post.like();
+                }
+        );
     }
+
     @Transactional
-    public String likeComment(Long postId, Long commentId, User user) {
-        Post post=postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("댓글이 존재하지 않습니다"));
-        Like like= new Like(user,post,comment);
+    public void likeComment(Long postId, Long commentId, User user) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다"));
 
-        Like likeExist = likeRepository.findByUserIdAndPostIdAndCommentId(user.getId(),postId,commentId);
+        Optional<Like> likeExist = likeRepository.findByUserIdAndPostIdAndCommentId(user.getId(), postId, commentId);
 
-        if(likeExist==null){
-            likeRepository.save(like);
-            comment.like();
-            return "댓글 좋아요";
-        }else {
-            likeRepository.delete(likeExist);
-            comment.disLike();
-            return "댓글 좋아요 취소";
-        }
+        likeExist.ifPresentOrElse(
+                like -> {
+                    likeRepository.delete(like);
+                    comment.disLike();
+                },
+                () -> {
+                    Like like = new Like(user, post, comment);
+                    likeRepository.save(like);
+                    comment.like();
+                }
+        );
     }
 }

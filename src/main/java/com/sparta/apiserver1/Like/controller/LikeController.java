@@ -18,18 +18,18 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/like/{postId}")
-    public String likePost(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return likeService.likePost(postId,userDetails.getUser());
+    public void likePost(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        likeService.likePost(postId,userDetails.getUser());
     }
 
 
 
     @PostMapping("/like/{postId}/{commentId}")
-    public String likeComment(@PathVariable Long postId,
+    public void likeComment(@PathVariable Long postId,
                             @PathVariable Long commentId,
                             @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        return likeService.likeComment(postId,commentId,userDetails.getUser());
+        likeService.likeComment(postId,commentId,userDetails.getUser());
 
     }
 }
