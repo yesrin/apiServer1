@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +27,9 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING) //이넘의 이름 그대로를 저장함. USER -> USER 생긴거 그대로 저장됨
     private UserRoleEnum role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Like> feedLikes = new ArrayList<>();
 
     public User(String username, String password, UserRoleEnum role) {
         this.username=username;

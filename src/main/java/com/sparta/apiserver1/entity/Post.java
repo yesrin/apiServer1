@@ -28,6 +28,12 @@ public class Post extends Timestamped{
     @Column(name="username", nullable = false)
     private String  username;
 
+    @Column(name="like_count")
+    private int likeCount;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<Like> likes=new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
