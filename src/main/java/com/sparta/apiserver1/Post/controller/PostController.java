@@ -17,20 +17,10 @@ import java.util.List;
 public class PostController {
     private final PostSerive postSerive;
 
-//    public PostController(PostSerive postSerive) {
-//        this.postSerive = postSerive;
-//    }
-
     @GetMapping("/post")
     public List<PostResponseDto> getPostALL() {
         return postSerive.getPostALL();
     }
-
-    @GetMapping("/post/{id}")
-    public PostResponseDto getPostByID(@PathVariable Long id){
-        return postSerive.getPostByID(id);
-    }
-
     @PutMapping("/post/{id}")
     public PostResponseDto updatePost(@PathVariable Long id,
                               @RequestBody PostRequestDto requestDto,
