@@ -8,12 +8,14 @@ import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LikeService {
 
@@ -31,11 +33,13 @@ public class LikeService {
                 like -> { // 값이 있으면 삭제하고 count-1
                     likeRepository.delete(like);
                     post.disLike();
+                    log.info("댓글 좋아요 취소");
                 },
                 () -> { // 값이 없으면 추가하고 count+1
                     Like like = new Like(user, post);
                     likeRepository.save(like);
                     post.like();
+                    log.info("댓글 좋아요 추가");
                 }
         );
     }
@@ -51,11 +55,13 @@ public class LikeService {
                 like -> {
                     likeRepository.delete(like);
                     comment.disLike();
+                    log.info("댓글 좋아요 취소");
                 },
                 () -> {
                     Like like = new Like(user, post, comment);
                     likeRepository.save(like);
                     comment.like();
+                    log.info("댓글 좋아요 추가");
                 }
         );
     }
