@@ -57,12 +57,6 @@ public class Post extends Timestamped {
         this.contents = requestDto.getContents();
     }
 
-    public void checkUsername(String username) {
-        if(!this.username.equals(username)) {
-            throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
-        }
-    }
-
     public void like(){
         this.likeCount=likeCount+1;
     }

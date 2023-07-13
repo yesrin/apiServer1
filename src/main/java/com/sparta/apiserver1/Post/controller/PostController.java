@@ -29,7 +29,7 @@ public class PostController {
     }
     @DeleteMapping("/post/{id}")
     public Long deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postSerive.deletePost(id,userDetails);
+        return postSerive.deletePost(id,userDetails.getUser());
     }
 
     @PostMapping("/post")

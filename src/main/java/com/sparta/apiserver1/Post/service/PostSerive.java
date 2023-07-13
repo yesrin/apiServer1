@@ -7,16 +7,19 @@ import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class PostSerive {
 
     private final PostRepository postRepository;
+    private final MessageSource messageSource;
 
     public List<PostResponseDto> getAllPostAndComment() {
        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
@@ -29,9 +32,19 @@ public class PostSerive {
         return new PostResponseDto(Post);
     }
 
-    public Long deletePost(Long id, UserDetailsImpl userDetails) {
+    public Long deletePost(Long id, User user) {
         Post post = findPost(id);
-        post.checkUsername(userDetails.getUsername());
+        //요청자(user) 가 같은지 체크
+        if (!post.getUsername().equals(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    messageSource.getMessage(
+                            "only.writer.delete",
+                            null ,
+                            "only writer can delete",
+                            Locale.getDefault()
+                    )
+            );
+        }
         postRepository.delete(post);
         return id;
     }
@@ -53,7 +66,18 @@ public class PostSerive {
 
         Post post = findPost(id);
 
-        post.checkUsername(user.getUsername());
+        //요청자(user) 가 같은지 체크
+        if (!post.getUsername().equals(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    messageSource.getMessage(
+                            "only.writer.update",
+                            null ,
+                            "only writer can update",
+                            Locale.getDefault()
+                    )
+            );
+        }
+
         post.update(requestDto);
 
         return new PostResponseDto(post);

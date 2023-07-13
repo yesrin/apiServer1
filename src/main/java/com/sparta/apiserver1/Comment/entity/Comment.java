@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Getter
@@ -51,11 +52,6 @@ public class Comment extends Timestamped {
         this.post=post;
     }
 
-    public void checkUsername(String username) {
-        if(!this.username.equals(username)) {
-            throw new IllegalArgumentException("작성자가 일치하지 않습니다.");
-        }
-    }
     public void update(CommentRequestDto requestDto) {
         this.contents=requestDto.getContents();
     }

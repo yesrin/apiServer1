@@ -6,9 +6,11 @@ import com.sparta.apiserver1.User.entity.UserRoleEnum;
 import com.sparta.apiserver1.Common.jwt.JwtUtil;
 import com.sparta.apiserver1.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 
@@ -19,16 +21,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final MessageSource messageSource;
 
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
-
-//    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
-//        this.userRepository = userRepository;
-//        this.passwordEncoder = passwordEncoder;
-//        this.jwtUtil = jwtUtil;
-//    }
 
     public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -37,7 +34,14 @@ public class UserService {
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new IllegalArgumentException(
+                    messageSource.getMessage(
+                            "user.name.duplicate",
+                            null ,
+                            "name is duplicate",
+                            Locale.getDefault()
+                    )
+            );
         }
 
         // 사용자 ROLE 확인
