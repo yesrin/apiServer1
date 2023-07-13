@@ -1,6 +1,6 @@
 package com.sparta.apiserver1.Common.config;
 import com.sparta.apiserver1.Common.jwt.JwtUtil;
-import com.sparta.apiserver1.Common.security.JwtAuthorizationFilter;
+import com.sparta.apiserver1.Common.jwt.JwtAuthorizationFilter;
 import com.sparta.apiserver1.Common.security.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
