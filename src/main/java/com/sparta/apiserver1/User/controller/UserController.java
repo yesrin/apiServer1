@@ -6,12 +6,17 @@ import com.sparta.apiserver1.User.dto.LoginRequestDto;
 import com.sparta.apiserver1.User.dto.SignupRequestDto;
 import com.sparta.apiserver1.User.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,10 +36,16 @@ public String login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRes
     return "로그인 성공";
 }
     @PostMapping("/signup")
-    public String signup(@RequestBody SignupRequestDto requestDto ) {
+    public void signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {//@Valid와 @Pattern 은 한쌍
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        if (fieldErrors.size() > 0) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                throw  new IllegalArgumentException(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
+                //log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
+            }
 
+        }
         userService.signup(requestDto);
 
-        return "회원가입 되었습니다";
     }
 }
