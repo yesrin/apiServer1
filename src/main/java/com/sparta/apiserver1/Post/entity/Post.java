@@ -1,8 +1,8 @@
 package com.sparta.apiserver1.Post.entity;
 
 import com.sparta.apiserver1.Comment.entity.Comment;
+import com.sparta.apiserver1.Like.entity.PostLike;
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
-import com.sparta.apiserver1.Like.entity.Like;
 import com.sparta.apiserver1.Common.entity.Timestamped;
 import com.sparta.apiserver1.User.entity.User;
 import jakarta.persistence.*;
@@ -36,7 +36,7 @@ public class Post extends Timestamped {
     private Long likeCount;
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    private List<Like> likes=new ArrayList<>();
+    private List<PostLike> likes=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

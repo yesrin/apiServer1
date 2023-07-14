@@ -12,9 +12,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="user_like")
+@Table(name="comment_like")
 @NoArgsConstructor
-public class Like extends Timestamped {
+public class CommentLike extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,14 +31,9 @@ public class Like extends Timestamped {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    public Like(User user, Post post) {
+    public CommentLike(User user,Post post, Comment comment) {
         this.user = user;
-        this.post = post;
-    }
-
-    public Like(User user, Post post, Comment comment) {
-        this.user = user;
-        this.post = post;
+        this.post=post;
         this.comment = comment;
     }
 }

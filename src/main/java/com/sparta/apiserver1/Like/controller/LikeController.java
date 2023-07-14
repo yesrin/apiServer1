@@ -4,7 +4,6 @@ import com.sparta.apiserver1.Common.security.UserDetailsImpl;
 import com.sparta.apiserver1.Like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ public class LikeController {
     public void likePost(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails){
         likeService.likePost(postId,userDetails.getUser());
     }
-
 
 
     @PostMapping("/like/{postId}/{commentId}")

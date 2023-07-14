@@ -1,10 +1,10 @@
 package com.sparta.apiserver1.User.service;
 
+import com.sparta.apiserver1.Common.jwt.JwtUtil;
 import com.sparta.apiserver1.User.dto.LoginRequestDto;
 import com.sparta.apiserver1.User.dto.SignupRequestDto;
 import com.sparta.apiserver1.User.entity.User;
 import com.sparta.apiserver1.User.entity.UserRoleEnum;
-import com.sparta.apiserver1.Common.jwt.JwtUtil;
 import com.sparta.apiserver1.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -21,7 +21,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
     private final MessageSource messageSource;
 
 

@@ -1,6 +1,7 @@
 package com.sparta.apiserver1.User.entity;
 
-import com.sparta.apiserver1.Like.entity.Like;
+import com.sparta.apiserver1.Like.entity.CommentLike;
+import com.sparta.apiserver1.Like.entity.PostLike;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,10 @@ public class User {
     private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Like> feedLikes = new ArrayList<>();
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikesLikes = new ArrayList<>();
 
     public User(String username, String password, UserRoleEnum role) {
         this.username=username;

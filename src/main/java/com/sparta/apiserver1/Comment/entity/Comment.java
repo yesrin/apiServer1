@@ -1,7 +1,7 @@
 package com.sparta.apiserver1.Comment.entity;
 
 import com.sparta.apiserver1.Comment.dto.CommentRequestDto;
-import com.sparta.apiserver1.Like.entity.Like;
+import com.sparta.apiserver1.Like.entity.CommentLike;
 import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Common.entity.Timestamped;
 import com.sparta.apiserver1.User.entity.User;
@@ -12,7 +12,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Entity
 @Getter
@@ -34,7 +33,7 @@ public class Comment extends Timestamped {
     private Long likeCount;
 
     @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL)
-    private List<Like> likes=new ArrayList<>();
+    private List<CommentLike> likes=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
