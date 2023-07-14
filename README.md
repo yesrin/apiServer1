@@ -4,7 +4,7 @@ https://documenter.getpostman.com/view/27924557/2s93z9ci6y
 
 
 ## ERD
-![img.png](img.png)
+![img_1.png](img_1.png)
 
 ## lv4 질문
 #### 질문1
