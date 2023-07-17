@@ -29,11 +29,8 @@ public class Comment extends Timestamped {
     @Column(name="username",nullable = false)
     private String username;
 
-    @Column(name="like_count")
-    private Long likeCount;
-
     @OneToMany(mappedBy = "comment",cascade = CascadeType.ALL)
-    private List<CommentLike> likes=new ArrayList<>();
+    private List<CommentLike> commentLikes=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -55,10 +52,4 @@ public class Comment extends Timestamped {
         this.contents=requestDto.getContents();
     }
 
-    public void like(){
-        this.likeCount=likeCount+1;
-    }
-    public void disLike(){
-        this.likeCount=likeCount-1;
-    }
 }

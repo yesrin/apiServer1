@@ -32,11 +32,8 @@ public class Post extends Timestamped {
     @Column(name="username", nullable = false)
     private String  username;
 
-    @Column(name="like_count")
-    private Long likeCount;
-
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
-    private List<PostLike> likes=new ArrayList<>();
+    private List<PostLike> postLikes=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -55,12 +52,5 @@ public class Post extends Timestamped {
     public void update(PostRequestDto requestDto) {
         this.title=requestDto.getTitle();
         this.contents = requestDto.getContents();
-    }
-
-    public void like(){
-        this.likeCount=likeCount+1;
-    }
-    public void disLike(){
-        this.likeCount=likeCount-1;
     }
 }
