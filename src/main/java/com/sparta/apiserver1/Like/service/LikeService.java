@@ -9,6 +9,7 @@ import com.sparta.apiserver1.Like.repository.PostLikeRepository;
 import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,44 +29,59 @@ public class LikeService {
 
     @Transactional
     public void likePost(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        Post post = findPost(postId);
 
-        Optional<PostLike> findPostLike = postLikeRepository.findByUserIdAndPostId(user.getId(), postId);
+        // 아래 조건 코드와 동일
+        // if (postLikeRepository.findByUserAndPost(user, post).isPresent()) {
+        if (postLikeRepository.existsByUserAndPost(user, post)) {
+            throw new DuplicateRequestException("이미 좋아요 한 게시글 입니다.");
+        } else {
+            PostLike postLike = new PostLike(user, post);
+            postLikeRepository.save(postLike);
+        }
+    }
 
-        findPostLike.ifPresentOrElse(
-                postlike -> { // 값이 있으면 삭제하고 count-1
-                    postLikeRepository.delete(postlike);
-                    post.disLike();
-                    log.info("게시글 좋아요 취소");
-                },
-                () -> { // 값이 없으면 추가하고 count+1
-                    PostLike postlike = new PostLike(user, post);
-                    postLikeRepository.save(postlike);
-                    post.like();
-                    log.info("게시글 좋아요 추가");
-                }
-        );
+    public void deleteLikePost(Long postId, User user) {
+        Post post = findPost(postId);
+        Optional<PostLike> postLikeOptional = postLikeRepository.findByUserAndPost(user, post);
+        if (postLikeOptional.isPresent()) {
+            postLikeRepository.delete(postLikeOptional.get());
+        } else {
+            throw new IllegalArgumentException("해당 게시글에 취소할 좋아요가 없습니다.");
+        }
     }
 
     @Transactional
-    public void likeComment(Long postId, Long commentId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다"));
+    public void likeComment(Long commentId, User user) {
+        Comment comment = findComment(commentId);
 
-        Optional<CommentLike> findCommentLike = commentLikeRepository.findByUserIdAndPostIdAndCommentId(user.getId(),postId,commentId);
+        if (commentLikeRepository.existsByUserAndComment(user, comment)) {
+            throw new DuplicateRequestException("이미 좋아요 한 댓글 입니다.");
+        } else {
+            CommentLike commentLike = new CommentLike(user, comment);
+            commentLikeRepository.save(commentLike);
+        }
+    }
 
-        findCommentLike.ifPresentOrElse(
-                commentLike -> {
-                    commentLikeRepository.delete(commentLike);
-                    comment.disLike();
-                    log.info("댓글 좋아요 취소");
-                },
-                () -> {
-                    CommentLike commentLike = new CommentLike(user, post, comment);
-                    commentLikeRepository.save(commentLike);
-                    comment.like();
-                    log.info("댓글 좋아요 추가");
-                }
+    public void deleteLikeComment(Long commentId, User user) {
+        Comment comment = findComment(commentId);
+        Optional<CommentLike> commentLikeOptional = commentLikeRepository.findByUserAndComment(user, comment);
+        if (commentLikeOptional.isPresent()) {
+            commentLikeRepository.delete(commentLikeOptional.get());
+        } else {
+            throw new IllegalArgumentException("해당 댓글에 취소할 좋아요가 없습니다.");
+        }
+    }
+
+    public Comment findComment(long id) {
+        return commentRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 댓글은 존재하지 않습니다.")
+        );
+    }
+
+    public Post findPost(long id) {
+        return postRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")
         );
     }
 }

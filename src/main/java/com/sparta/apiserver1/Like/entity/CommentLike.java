@@ -24,16 +24,11 @@ public class CommentLike extends Timestamped {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    public CommentLike(User user,Post post, Comment comment) {
+    public CommentLike(User user, Comment comment) {
         this.user = user;
-        this.post=post;
         this.comment = comment;
     }
 }
