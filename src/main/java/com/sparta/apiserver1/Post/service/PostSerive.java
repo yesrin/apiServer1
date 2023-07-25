@@ -27,7 +27,13 @@ public class PostSerive {
 
     public PostResponseDto getPostByID(Long id) {
         Post Post = postRepository.findById(id).orElseThrow(()
-                -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+                -> new IllegalArgumentException(
+                        messageSource.getMessage(
+                "post.not.exist",
+                null ,
+                "post does not exist",
+                Locale.getDefault()
+        )));
 
         return new PostResponseDto(Post);
     }
@@ -51,7 +57,12 @@ public class PostSerive {
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 게시물이 존재하지 않습니다"));
+                new IllegalArgumentException( messageSource.getMessage(
+                        "post.not.exist",
+                        null ,
+                        "post does not exist",
+                        Locale.getDefault()
+                )));
     };
     @Transactional
     public PostResponseDto addPost(PostRequestDto requestDto, User user) {

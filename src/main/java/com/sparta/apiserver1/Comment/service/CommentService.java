@@ -42,13 +42,25 @@ public class CommentService {
     @Transactional
     public CommentResponseDto updateComment(Long postId, Long commentId, CommentRequestDto requestDto, User user) {
         findPost(postId);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("선택한 댓글이 존재하지 않습니다."));
+
+        //댓글이 존재하는지 확인
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+                new IllegalArgumentException(
+                        messageSource.getMessage(
+                                "comment.not.exist",
+                                null,
+                                "comment do not exist",
+                                Locale.getDefault()
+                        )
+                )
+        );
+
         //요청자(user) 가 같은지 체크
         if (!comment.getUsername().equals(user.getUsername())) {
             throw new IllegalArgumentException(
                     messageSource.getMessage(
                             "only.writer.update",
-                            null ,
+                            null,
                             "only writer can update",
                             Locale.getDefault()
                     )
@@ -58,16 +70,23 @@ public class CommentService {
         return new CommentResponseDto(comment);
 
     }
+
     public CommentResponseDto deleteCommit(Long postId, Long commentId, User user) {
         findPost(postId);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("선택한 댓글이 존재하지 않습니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(
+                messageSource.getMessage(
+                        "comment.not.exist",
+                        null,
+                        "comment do not exist",
+                        Locale.getDefault()
+                )));
 
         //요청자(user) 가 같은지 체크
         if (!comment.getUsername().equals(user.getUsername())) {
             throw new IllegalArgumentException(
                     messageSource.getMessage(
                             "only.writer.delete",
-                            null ,
+                            null,
                             "only writer can delete",
                             Locale.getDefault()
                     )
@@ -80,7 +99,13 @@ public class CommentService {
 
     private Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(() ->
-                new IllegalArgumentException("선택한 게시물이 존재하지 않습니다"));
+                new IllegalArgumentException(
+                        messageSource.getMessage(
+                                "post.not.exist",
+                                null,
+                                "post does not exist",
+                                Locale.getDefault()
+                        )));
     }
 
 

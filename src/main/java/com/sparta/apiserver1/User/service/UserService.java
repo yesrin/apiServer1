@@ -37,7 +37,7 @@ public class UserService {
             throw new IllegalArgumentException(
                     messageSource.getMessage(
                             "user.name.duplicate",
-                            null ,
+                            null,
                             "name is duplicate",
                             Locale.getDefault()
                     )
@@ -48,7 +48,13 @@ public class UserService {
         UserRoleEnum role = UserRoleEnum.USER;
         if (requestDto.isAdmin()) {
             if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new IllegalArgumentException(
+                        messageSource.getMessage(
+                                "admin.password.different",
+                                null,
+                                "Administrator password is different",
+                                Locale.getDefault()
+                        ));
             }
             role = UserRoleEnum.ADMIN;
         }
@@ -64,10 +70,10 @@ public class UserService {
 
         //사용자 확인 (username 이 없는 경우)
         User user = userRepository.findByUsername(username).orElseThrow(
-                () ->new IllegalArgumentException(
+                () -> new IllegalArgumentException(
                         messageSource.getMessage(
                                 "user.not.found",
-                                null ,
+                                null,
                                 "user not found",
                                 Locale.getDefault()
                         )
@@ -75,7 +81,7 @@ public class UserService {
         );
 
         //비밀번호 확인 (password 가 다른 경우)
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("password.not.match");
         }
     }
