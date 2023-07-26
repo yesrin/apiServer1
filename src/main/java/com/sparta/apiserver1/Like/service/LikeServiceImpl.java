@@ -2,6 +2,7 @@ package com.sparta.apiserver1.Like.service;
 
 import com.sparta.apiserver1.Comment.entity.Comment;
 import com.sparta.apiserver1.Comment.repository.CommentRepository;
+import com.sparta.apiserver1.Common.exception.NotFoundException;
 import com.sparta.apiserver1.Like.entity.CommentLike;
 import com.sparta.apiserver1.Like.entity.PostLike;
 import com.sparta.apiserver1.Like.repository.CommentLikeRepository;
@@ -104,7 +105,7 @@ public class LikeServiceImpl implements LikeService {
 
     public Comment findComment(long id) {
         return commentRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException(
+                new NotFoundException(
                         messageSource.getMessage(
                                 "comment.not.exist",
                                 null,
@@ -116,7 +117,7 @@ public class LikeServiceImpl implements LikeService {
 
     public Post findPost(long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException(
+                new NotFoundException(
                         messageSource.getMessage(
                                 "post.not.exist",
                                 null,

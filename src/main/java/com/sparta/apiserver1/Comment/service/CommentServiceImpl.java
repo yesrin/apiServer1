@@ -4,6 +4,7 @@ import com.sparta.apiserver1.Comment.dto.CommentRequestDto;
 import com.sparta.apiserver1.Comment.dto.CommentResponseDto;
 import com.sparta.apiserver1.Comment.entity.Comment;
 import com.sparta.apiserver1.Comment.repository.CommentRepository;
+import com.sparta.apiserver1.Common.exception.NotFoundException;
 import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
@@ -45,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
 
         //댓글이 존재하는지 확인
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
-                new IllegalArgumentException(
+                new NotFoundException(
                         messageSource.getMessage(
                                 "comment.not.exist",
                                 null,
@@ -74,13 +75,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentResponseDto deleteCommit(Long postId, Long commentId, User user) {
         findPost(postId);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(
-                messageSource.getMessage(
-                        "comment.not.exist",
-                        null,
-                        "comment do not exist",
-                        Locale.getDefault()
-                )));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+                new NotFoundException(
+                        messageSource.getMessage(
+                                "comment.not.exist",
+                                null,
+                                "comment do not exist",
+                                Locale.getDefault()
+                        )));
 
         //요청자(user) 가 같은지 체크
         if (!comment.getUsername().equals(user.getUsername())) {
@@ -100,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
 
     private Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(() ->
-                new IllegalArgumentException(
+                new NotFoundException(
                         messageSource.getMessage(
                                 "post.not.exist",
                                 null,

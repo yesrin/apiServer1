@@ -1,5 +1,6 @@
 package com.sparta.apiserver1.Post.service;
 
+import com.sparta.apiserver1.Common.exception.NotFoundException;
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
 import com.sparta.apiserver1.Post.entity.Post;
@@ -45,7 +46,7 @@ public class PostServiceImpl implements PostSerive {
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException(messageSource.getMessage(
+                new NotFoundException(messageSource.getMessage(
                         "post.not.exist",
                         null,
                         "post does not exist",
