@@ -2,6 +2,7 @@ package com.sparta.apiserver1.Post.service;
 
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
+import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.User.entity.User;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface PostSerive {
 
 
     PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user);
+
+    List<Post> searchPost(String keyword);
 }

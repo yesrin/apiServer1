@@ -1,5 +1,7 @@
 package com.sparta.apiserver1.Post.service;
 
+import com.querydsl.codegen.Keywords;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.apiserver1.Common.exception.NotFoundException;
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
@@ -14,12 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Locale;
 
+import static com.sparta.apiserver1.Post.entity.QPost.post;
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostSerive {
 
     private final PostRepository postRepository;
     private final MessageSource messageSource;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<PostResponseDto> getAllPostAndComment() {
@@ -86,5 +91,19 @@ public class PostServiceImpl implements PostSerive {
         post.update(requestDto);
 
         return new PostResponseDto(post);
+    }
+
+    @Override
+    public List<Post> searchPost(String keyword) {
+        var query = jpaQueryFactory.select(post)
+                .from(post)
+                .where(
+                    post.title.contains(keyword)
+                );
+
+        var posts = query.fetch();
+        System.out.println(posts.size());
+
+        return posts;
     }
 }
