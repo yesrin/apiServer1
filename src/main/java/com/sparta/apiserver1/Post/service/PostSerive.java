@@ -19,5 +19,5 @@ public interface PostSerive {
 
     PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user);
 
-    List<Post> searchPost(String keyword);
+    List<PostResponseDto> searchPost(String keyword);
 }
