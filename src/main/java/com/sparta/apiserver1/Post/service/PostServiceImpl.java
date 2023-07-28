@@ -6,7 +6,6 @@ import com.sparta.apiserver1.Post.dto.PostResponseDto;
 import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
-import com.sparta.apiserver1.User.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
@@ -78,11 +77,10 @@ public class PostServiceImpl implements PostSerive {
 
         Post post = findPost(id);
 
-        //작성자가 아니거나 이거고 관리자이가 아니면 예외처리
+        //작성자가 아니거나 이거나 관리자이가 아니면 예외처리
+        if(!user.getRole().getAuthority().equals("ROLE_ADMIN")){
 
-
-            if (!(post.getUsername().equals(user.getUsername()) && user.getRole().getAuthority().equals("ROLE_ADMIN"))) {
-
+            if (!post.getUsername().equals(user.getUsername())) {
                 throw new IllegalArgumentException(
                         messageSource.getMessage(
                                 "not.have.role",
@@ -91,6 +89,7 @@ public class PostServiceImpl implements PostSerive {
                                 Locale.getDefault()
                         ));
             }
+        }
 
         post.update(requestDto);
 
