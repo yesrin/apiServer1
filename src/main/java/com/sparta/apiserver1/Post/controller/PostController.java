@@ -6,6 +6,7 @@ import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
 import com.sparta.apiserver1.Post.service.PostSerive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,8 @@ public class PostController {
     }
 
     @GetMapping("/post/search")
-    public List<PostResponseDto> searchPost(String keyword) {
-        return postSerive.searchPost(keyword);
+    public List<PostResponseDto> searchPost(String keyword, Pageable pageable) {
+        return postSerive.searchPost(keyword,pageable);
     }
 
     @PutMapping("/post/{id}")

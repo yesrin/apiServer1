@@ -1,10 +1,9 @@
 package com.sparta.apiserver1.Post.repository;
 
 import com.sparta.apiserver1.Post.entity.Post;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PostRepositoryQuery {
-    List<Post> search(String keyword);
+    Page<Post> search(String keyword, Pageable pageable);
 }

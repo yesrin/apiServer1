@@ -2,8 +2,8 @@ package com.sparta.apiserver1.Post.service;
 
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
-import com.sparta.apiserver1.Post.entity.Post;
 import com.sparta.apiserver1.User.entity.User;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,5 +19,5 @@ public interface PostSerive {
 
     PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user);
 
-    List<PostResponseDto> searchPost(String keyword);
+    List<PostResponseDto> searchPost(String keyword, Pageable pageable);
 }

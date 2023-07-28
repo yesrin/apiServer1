@@ -8,6 +8,7 @@ import com.sparta.apiserver1.Post.repository.PostRepository;
 import com.sparta.apiserver1.User.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,9 @@ public class PostServiceImpl implements PostSerive {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
     }
     @Override
-    public List<PostResponseDto> searchPost(String keyword) {
+    public List<PostResponseDto> searchPost(String keyword, Pageable pageable) {
 
-        return postRepository.search(keyword).stream().map(PostResponseDto::new).toList();
+        return postRepository.search(keyword,pageable).stream().map(PostResponseDto::new).toList();
     }
 
     @Override
