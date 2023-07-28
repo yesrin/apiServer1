@@ -1,7 +1,7 @@
 package com.sparta.apiserver1.Common.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.apiserver1.Common.exception.RestApiException;
+import com.sparta.apiserver1.Common.exception.ApiResponseDto;
 import com.sparta.apiserver1.Common.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -40,7 +40,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if(token != null) {
             if(!jwtUtil.validateToken(token)){
                 //여긴 필터가 어려워서 못바꾸겠음 messageSource 나중에 적용
-                RestApiException responseDto = new RestApiException("토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
+                ApiResponseDto responseDto = new ApiResponseDto("토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("application/json; charset=UTF-8");
                 response.getWriter().write(objectMapper.writeValueAsString(responseDto));

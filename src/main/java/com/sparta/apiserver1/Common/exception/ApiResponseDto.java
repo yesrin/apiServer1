@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RestApiException {
+public class ApiResponseDto {
     private String errorMessage;
     private int statusCode;
 
-    public RestApiException(String msg, Integer statusCode) {
+    public ApiResponseDto(String msg, Integer statusCode) {
         this.errorMessage = msg;
         this.statusCode = statusCode;
     }
