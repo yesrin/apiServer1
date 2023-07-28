@@ -9,17 +9,9 @@ import java.util.List;
 import static com.sparta.apiserver1.Post.entity.QPost.post;
 
 @RequiredArgsConstructor
-public class PostRepositoryImpl implements CustomPostRepository{
+public class PostRepositoryQueryImpl implements PostRepositoryQuery {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-//    @Override
-//    public List<Post> findAllByOrderByCreatedAtDesc(){
-//        var queary =jpaQueryFactory.select(post).from(post).orderBy(post.createdAt.desc());
-//
-//        var posts=queary.fetch();
-//        return posts;
-//    };
 
     @Override
     public List<Post> search(String keyword) {

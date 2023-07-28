@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface CustomPostRepository {
-//    List<Post> findAllByOrderByCreatedAtDesc();
+public interface PostRepositoryQuery {
     List<Post> search(String keyword);
 }
