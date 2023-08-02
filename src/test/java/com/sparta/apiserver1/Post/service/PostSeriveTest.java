@@ -24,18 +24,19 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
-//@SpringBootTest
 @ExtendWith(MockitoExtension.class) //@Mock 사용을 위해 선언
 class PostSeriveTest {
     private Principal mockPrincipal;
     @Mock
     PostRepository postRepository;
-    @MockBean
+    @Mock
     UserDetailsImpl userDetails;
-    @MockBean
+    @Mock
     UserRepository userRepository;
-    @MockBean
+    @Mock
     MessageSource messageSource;
 
     User testUser;
@@ -66,24 +67,22 @@ class PostSeriveTest {
         String contents = "Test content";
 
         PostRequestDto requestDto = new PostRequestDto(title, contents);
-        requestDto.setTitle(title);
-        requestDto.setContents(contents);
 
         PostServiceImpl postService = new PostServiceImpl(postRepository, messageSource);
 
         Post post = new Post(requestDto, testUser);
 
-        given(postRepository.save(any())).willReturn(post); //이게 임시로 저장해주는건가보다
+        given(postRepository.save(any())).willReturn(post); //save에 아무거나 넣어도 post 반환하겠다
 
         //when 실제로 수행
         PostResponseDto result = postService.addPost(requestDto, testUser);
-        //postService.addPost(requestDto, testUser);
 
         //then
-        //verify(postRepository.save(post)); //행위검증: save가 실행하는지 알려줌
+        //행위검증으로는 verify()를 사용하기도 함
+        then(postRepository).should(times(1)).save(any()); //한번호출
 
+        // 리턴값은 상태검증
         assertEquals(title, result.getTitle());
-        // 상태검증 일치하는지 알려줌 but, db에 실제로 저장되는게 아니라 리턴값을 비교하는것이므로 의미없음
     }
 
     @Test
