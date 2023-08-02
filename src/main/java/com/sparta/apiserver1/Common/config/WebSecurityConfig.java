@@ -1,7 +1,12 @@
 package com.sparta.apiserver1.Common.config;
-import com.sparta.apiserver1.Common.jwt.JwtUtil;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.apiserver1.Common.jwt.JwtAuthenticationFilter;
 import com.sparta.apiserver1.Common.jwt.JwtAuthorizationFilter;
+import com.sparta.apiserver1.Common.jwt.JwtUtil;
 import com.sparta.apiserver1.Common.security.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,14 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.RequiredArgsConstructor;
-
-/**
- * 1. 인증설정
- * WebSecurityConfig > jwtUtil > UsernamePasswordAuthenticationFilter > SecurityFilterChain > 요청별 인증수행
- */
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
 @RequiredArgsConstructor
@@ -31,7 +28,9 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationConfiguration authenticationConfiguration;
     private final ObjectMapper objectMapper;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,8 +43,15 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+        return filter;
+    }
+
+    @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, objectMapper);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
 
     @Bean
@@ -67,8 +73,13 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
+        http.formLogin((formLogin) ->
+                        formLogin.disable()
+//                        .loginPage("/api/user/login-page").permitAll()
+        );
         // 필터 관리
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
