@@ -7,9 +7,12 @@ import com.sparta.apiserver1.Post.dto.PostResponseDto;
 import com.sparta.apiserver1.Post.service.PostSerive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,26 +28,28 @@ public class PostController {
 
     @GetMapping("/post/search")
     public List<PostResponseDto> searchPost(String keyword, Pageable pageable) {
-        return postSerive.searchPost(keyword,pageable);
+        return postSerive.searchPost(keyword, pageable);
     }
 
-    @PutMapping("/post/{id}")
+    @PutMapping(value = "/post/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public PostResponseDto updatePost(@PathVariable Long id,
-                              @RequestBody PostRequestDto requestDto,
-                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postSerive.updatePost(id, requestDto, userDetails.getUser());
+                                      @RequestPart PostRequestDto requestDto,
+                                      @RequestPart List<MultipartFile> image,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        return postSerive.updatePost(id, requestDto, userDetails.getUser(), image);
     }
+
     @DeleteMapping("/post/{id}")
     public Long deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postSerive.deletePost(id,userDetails.getUser());
+        return postSerive.deletePost(id, userDetails.getUser());
     }
 
-    @PostMapping("/post")
-    public PostResponseDto addPost (@RequestBody PostRequestDto requestDto,
-                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postSerive.addPost(requestDto, userDetails.getUser());
+    @PostMapping(value = "/post", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public PostResponseDto addPost(@RequestPart PostRequestDto requestDto,
+                                   @RequestPart List<MultipartFile> image,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        return postSerive.addPost(requestDto, userDetails.getUser(), image);
     }
-
 
 
 }

@@ -1,6 +1,7 @@
 package com.sparta.apiserver1.Post.service;
 
 import com.sparta.apiserver1.Common.exception.NotFoundException;
+import com.sparta.apiserver1.Common.image.ImageUploader;
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
 import com.sparta.apiserver1.Post.entity.Post;
@@ -11,7 +12,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -21,6 +24,7 @@ public class PostServiceImpl implements PostSerive {
 
     private final PostRepository postRepository;
     private final MessageSource messageSource;
+    private final ImageUploader imageUploader;
 
     @Override
     public List<PostResponseDto> getAllPostAndComment() {
@@ -64,7 +68,13 @@ public class PostServiceImpl implements PostSerive {
 
     @Override
     @Transactional
-    public PostResponseDto addPost(PostRequestDto requestDto, User user) {
+    public PostResponseDto addPost(PostRequestDto requestDto, User user,List<MultipartFile> image) throws IOException {
+        if (image != null) {
+            for (int i = 0; i<image.size(); i++){
+                String imageUrl = imageUploader.upload(image.get(i), "image");
+                requestDto.setImageUrl(imageUrl);
+            }
+        }
         Post post = new Post(requestDto, user);
         Post savePost = postRepository.save(post);
         PostResponseDto postResponseDto = new PostResponseDto(savePost);
@@ -73,8 +83,13 @@ public class PostServiceImpl implements PostSerive {
 
     @Override
     @Transactional
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user) {
-
+    public PostResponseDto updatePost(Long id, PostRequestDto requestDto, User user,List<MultipartFile> image) throws IOException {
+        if (image != null) {
+            for (int i = 0; i<image.size(); i++){
+                String imageUrl = imageUploader.upload(image.get(i), "image");
+                requestDto.setImageUrl(imageUrl);
+            }
+        }
         Post post = findPost(id);
 
         //작성자가 아니거나 이거나 관리자이가 아니면 예외처리

@@ -29,14 +29,14 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
-@PostMapping("/login")
-public ResponseEntity<ApiResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-
-    userService.login(loginRequestDto);
-    //JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
-    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(loginRequestDto.getUsername(), loginRequestDto.getRole()));
-    return ResponseEntity.ok(new ApiResponseDto("로그인 성공",200));
-}
+//@PostMapping("/login")
+//public ResponseEntity<ApiResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+//
+//    userService.login(loginRequestDto);
+//    //JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
+//    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(loginRequestDto.getUsername(), loginRequestDto.getRole()));
+//    return ResponseEntity.ok(new ApiResponseDto("로그인 성공",200));
+//}
     @PostMapping("/signup")
     public ResponseEntity<ApiResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {//@Valid와 @Pattern 은 한쌍
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
