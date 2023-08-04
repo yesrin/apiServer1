@@ -29,6 +29,9 @@ public class Post extends Timestamped {
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
 
+    @Column(name ="imageUrl")
+    private String imageUrl;
+
     @Column(name="username", nullable = false)
     private String  username;
 
@@ -45,6 +48,7 @@ public class Post extends Timestamped {
     public Post(PostRequestDto requestDto, User user) {
         this.title=requestDto.getTitle();
         this.contents= requestDto.getContents();
+        this.imageUrl=requestDto.getImageUrl();
         this.username= user.getUsername();
         this.user=user;
     }
@@ -52,5 +56,6 @@ public class Post extends Timestamped {
     public void update(PostRequestDto requestDto) {
         this.title=requestDto.getTitle();
         this.contents = requestDto.getContents();
+        this.imageUrl=requestDto.getImageUrl();
     }
 }

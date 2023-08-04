@@ -10,6 +10,7 @@ public class PostResponseDto {
     private Long id;
     private String title;
     private String contents;
+    private String imageUrl;
     private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -18,6 +19,7 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
+        this.imageUrl=post.getImageUrl();
         this.likeCount= post.getPostLikes().size();
         this.createdAt= post.getCreatedAt();
         this.modifiedAt= post.getModifiedAt();

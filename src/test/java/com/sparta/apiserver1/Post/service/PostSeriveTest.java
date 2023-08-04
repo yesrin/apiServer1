@@ -1,5 +1,6 @@
 package com.sparta.apiserver1.Post.service;
 
+import com.sparta.apiserver1.Common.image.ImageUploader;
 import com.sparta.apiserver1.Common.security.UserDetailsImpl;
 import com.sparta.apiserver1.Post.dto.PostRequestDto;
 import com.sparta.apiserver1.Post.dto.PostResponseDto;
@@ -14,18 +15,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class) //@Mock 사용을 위해 선언
 class PostSeriveTest {
@@ -38,8 +42,10 @@ class PostSeriveTest {
     UserRepository userRepository;
     @Mock
     MessageSource messageSource;
-
+    @Mock
+    ImageUploader imageUploader;
     User testUser;
+    private Object MultipartFile;
 
     @BeforeEach
     private void mockUserSetup() {
@@ -61,21 +67,24 @@ class PostSeriveTest {
     }
 
     @Test
-    void addPost() {
+    void addPost() throws IOException {
         //given
         String title = "Test title";
         String contents = "Test content";
+        String imageUrl = "http://dsfadio";
 
-        PostRequestDto requestDto = new PostRequestDto(title, contents);
+        PostRequestDto requestDto = new PostRequestDto(title, contents, imageUrl);
 
-        PostServiceImpl postService = new PostServiceImpl(postRepository, messageSource);
+        PostServiceImpl postService = new PostServiceImpl(postRepository, messageSource, imageUploader);
 
         Post post = new Post(requestDto, testUser);
 
         given(postRepository.save(any())).willReturn(post); //save에 아무거나 넣어도 post 반환하겠다
 
+        List<MultipartFile> image = new ArrayList<>();
+
         //when 실제로 수행
-        PostResponseDto result = postService.addPost(requestDto, testUser);
+        PostResponseDto result = postService.addPost(requestDto, testUser, image);
 
         //then
         //행위검증으로는 verify()를 사용하기도 함
@@ -87,23 +96,27 @@ class PostSeriveTest {
 
     @Test
     @DisplayName("게시글 업데이트")
-    void updatePost() {
+    void updatePost() throws IOException {
         //given
         Long postId = 3L;
         String title = "Test title";
         String contents = "Test content";
+        String imageUrl = "http://dsfadio";
 
-        PostRequestDto requestDto = new PostRequestDto(title, contents);
+        PostRequestDto requestDto = new PostRequestDto(title, contents, imageUrl);
         requestDto.setTitle(title);
         requestDto.setContents(contents);
 
         Post post = new Post(requestDto, testUser);
-        PostServiceImpl postService = new PostServiceImpl(postRepository, messageSource);
+
+        List<MultipartFile> image = new ArrayList<>();
+
+        PostServiceImpl postService = new PostServiceImpl(postRepository, messageSource, imageUploader);
 
         given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
         //when 실제로 수행
-        PostResponseDto result = postService.updatePost(postId, requestDto, testUser);
+        PostResponseDto result = postService.updatePost(postId, requestDto, testUser, image);
 
         //then
         assertEquals(title, result.getTitle());
